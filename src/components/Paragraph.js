@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 25,
     lineHeight: 21,
-    textAlign: 'center',
+    // textAlign: 'center',
     marginBottom: 12,
     fontFamily: 'Game On_PersonalUseOnly',
     fontWeight:'bold',

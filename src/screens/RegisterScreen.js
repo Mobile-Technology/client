@@ -11,26 +11,42 @@ import { theme } from '../core/theme'
 import { emailValidator } from '../helpers/emailValidator'
 import { passwordValidator } from '../helpers/passwordValidator'
 import { nameValidator } from '../helpers/nameValidator'
+import axios from 'axios'
 
 export default function RegisterScreen({ navigation }) {
   const [name, setName] = useState({ value: '', error: '' })
   const [email, setEmail] = useState({ value: '', error: '' })
   const [password, setPassword] = useState({ value: '', error: '' })
+  const [passwordConfirm, setPasswordConfirm] = useState({ value: '', error: '' })
 
   const onSignUpPressed = () => {
     const nameError = nameValidator(name.value)
     const emailError = emailValidator(email.value)
     const passwordError = passwordValidator(password.value)
+    const passwordConfirmError = passwordValidator(passwordConfirm.value)
     if (emailError || passwordError || nameError) {
       setName({ ...name, error: nameError })
       setEmail({ ...email, error: emailError })
       setPassword({ ...password, error: passwordError })
+      setPasswordConfirm({ ...passwordConfirm, error: passwordConfirmError })
       return
+    }else{
+      axios.post('https://tebar.spydercode.my.id/api/register', {
+        name:name.value,
+        email: email.value,
+        password: password.value,
+        password_confirmation: passwordConfirm.value
+      })
+      .then(function (response) {
+        navigation.navigate( 'Dashboard',{
+          user: response.data,
+          }
+        )
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     }
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Dashboard' }],
-    })
   }
 
   return (
@@ -70,10 +86,10 @@ export default function RegisterScreen({ navigation }) {
       <TextInput
         label="Password Confirm"
         returnKeyType="done"
-        value={password.value}
-        onChangeText={(text) => setPassword({ value: text, error: '' })}
-        error={!!password.error}
-        errorText={password.error}
+        value={passwordConfirm.value}
+        onChangeText={(text) => setPasswordConfirm({ value: text, error: '' })}
+        error={!!passwordConfirm.error}
+        errorText={passwordConfirm.error}
         secureTextEntry
       />
       <Button

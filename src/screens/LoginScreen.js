@@ -10,10 +10,12 @@ import BackButton from '../components/BackButton'
 import { theme } from '../core/theme'
 import { emailValidator } from '../helpers/emailValidator'
 import { passwordValidator } from '../helpers/passwordValidator'
+import Loading from '../components/Loading'
+import axios from 'axios'
 
 export default function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState({ value: '', error: '' })
-  const [password, setPassword] = useState({ value: '', error: '' })
+  const [email, setEmail] = useState({ value: 'admin@yahoo.com', error: '' })
+  const [password, setPassword] = useState({ value: 'admin123', error: '' })
 
   const onLoginPressed = () => {
     const emailError = emailValidator(email.value)
@@ -22,11 +24,21 @@ export default function LoginScreen({ navigation }) {
       setEmail({ ...email, error: emailError })
       setPassword({ ...password, error: passwordError })
       return
+    }else{
+      axios.post('https://tebar.spydercode.my.id/api/login', {
+        email: email.value,
+        password: password.value,
+      })
+      .then(function (response) {
+        navigation.navigate( 'Dashboard',{
+          user: response.data,
+          }
+        )
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     }
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Dashboard' }],
-    })
   }
 
   return (
