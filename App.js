@@ -14,7 +14,8 @@ import {
   Room,
   Wait,
   Playing,
-  Ranking
+  Ranking,
+  CreateRoom
 } from './src/screens'
 
 const Stack = createStackNavigator()
@@ -39,6 +40,7 @@ export default function App() {
           <Stack.Screen name="Wait" component={Wait} />
           <Stack.Screen name="Playing" component={Playing} />
           <Stack.Screen name="Ranking" component={Ranking} />
+          <Stack.Screen name="CreateRoom" component={CreateRoom} />
           <Stack.Screen
             name="ResetPasswordScreen"
             component={ResetPasswordScreen}

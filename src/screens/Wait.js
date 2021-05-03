@@ -8,17 +8,44 @@ import { FlatList } from "react-native-gesture-handler"
 import { ImageBackground, SafeAreaView, View } from 'react-native'
 import { Container, Content, List, ListItem, Left, Body, Right, Thumbnail, Text, Button, Badge } from 'native-base';
 import axios from 'axios'
+import { io } from "socket.io-client";
 
 const Wait = ({navigation,route}) => {
     const [room, setRoom] = useState([])
-
+    const [data, setData] = useState(null)
+    const [idroomplay, setIdroomplay] = useState(null)
+    const socket = io.connect('http://localhost:3000');
     useEffect(() => {
         getRoom();
-    },[])
+        socket.on('update',(message)=>{
+            getRoom();
+        });
+    })
 
     const getRoom = () =>{
-        axios.get('https://tebar.spydercode.my.id/api/rooms')
+        if(room.length==0){
+            axios.get('https://tebar.spydercode.my.id/api/rooms/'+route.params.room_id)
             .then(response =>setRoom(response.data.data))
+        }
+        if(data==null){
+            axios.get('https://tebar.spydercode.my.id/api/rooms/detail/'+route.params.room_id)
+                .then(response =>setData(response.data))
+        }
+        if(idroomplay==null){
+            axios.get('https://tebar.spydercode.my.id/api/roomPlay/'+route.params.user.id+'/'+route.params.room_id)
+                .then(response =>setIdroomplay(response.data))
+        }
+    }
+    
+    const back = () => {
+        axios.delete('https://tebar.spydercode.my.id/api/room_plays/'+ idroomplay)
+            .then(function (response) {
+                axios.get('https://tebar.spydercode.my.id/api/users/status/'+route.params.user.id+'/'+0)
+                .then(function(response){
+                    socket.emit('update','Update')
+                    navigation.navigate('Room',{user:route.params.user})
+                })
+            });
     }
 
     let listItemView = (item,data) => {
@@ -26,7 +53,7 @@ const Wait = ({navigation,route}) => {
             <List>
                 <ListItem thumbnail>
                 <Body>
-                    <Text>{item.name}</Text>
+                    <Text>{item.user_name}</Text>
                 </Body>
                 <Right>
                     <Button transparent>
@@ -44,10 +71,22 @@ const Wait = ({navigation,route}) => {
         )
     }
 
+    console.log(idroomplay);
+    const buttonPlay = ()=>{
+        return(
+            <Buttons
+                mode="outlined"
+                onPress={() => navigation.navigate('Playing')}
+                >
+                Play Game
+            </Buttons>
+        )
+    }
+
     return (
         <Background>
-            <BackButton goBack={navigation.goBack} />
-            <Header>Room</Header>
+            {/* <BackButton goBack={navigation.goBack} /> */}
+            <Header>{data==null?null:data.name}</Header>
             <View style={{ flex:1, width:'100%' }}>
                 <FlatList
                     data={room}
@@ -56,12 +95,13 @@ const Wait = ({navigation,route}) => {
                     renderItem={({ item }) => listItemView(item)}
                 />
             </View>    
-                    <Buttons
-                    mode="outlined"
-                    onPress={() => navigation.navigate('Playing')}
-                    >
-                    Play Game
-                    </Buttons>
+                {data==null?null:data.user_id==route.params.user.id?buttonPlay():null}
+                <Buttons
+                mode="outlined"
+                onPress={() => back()}
+                >
+                Keluar ruangan
+                </Buttons>
         </Background>
     )
 }
