@@ -11,7 +11,12 @@ import { io } from "socket.io-client";
 
 const Room = ({navigation,route}) => {
     const [room, setRoom] = useState([]);
-    const socket = io.connect('http://localhost:3000');
+    const socket = io.connect('https://tebar.spydercode.my.id', {
+        path: "/io",
+        extraHeaders: {
+            "my-custom-header": "abcd"
+        }
+    });
 
     useEffect(() => {
         getRoom();

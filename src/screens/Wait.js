@@ -14,7 +14,12 @@ const Wait = ({navigation,route}) => {
     const [room, setRoom] = useState([])
     const [data, setData] = useState(null)
     const [idroomplay, setIdroomplay] = useState(null)
-    const socket = io.connect('http://localhost:3000');
+    const socket = io.connect('https://tebar.spydercode.my.id', {
+        path: "/io",
+        extraHeaders: {
+            "my-custom-header": "abcd"
+        }
+    });
     useEffect(() => {
         getRoom();
         socket.on('update',(message)=>{
@@ -76,7 +81,7 @@ const Wait = ({navigation,route}) => {
         return(
             <Buttons
                 mode="outlined"
-                onPress={() => navigation.navigate('Playing')}
+                onPress={() => navigation.navigate('Playing',{room_id:route.params.room_id,user:route.params.user})}
                 >
                 Play Game
             </Buttons>

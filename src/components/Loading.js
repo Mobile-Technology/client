@@ -6,7 +6,7 @@ export default function Loading({ children }) {
     const no = Math.floor((Math.random() * 4) + 1);
   return (
     <ImageBackground
-      source={require('../assets/loading_2.gif')}
+      source={require('../../assets/loading.gif')}
       // resizeMode="repeat"
       style={styles.background}
     >

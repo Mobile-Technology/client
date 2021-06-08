@@ -13,6 +13,5 @@ const styles = StyleSheet.create({
     color: theme.colors.dark,
     fontWeight: 'bold',
     paddingVertical: 12,
-    fontFamily: 'Game On_PersonalUseOnly'
   },
 })

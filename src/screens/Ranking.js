@@ -17,8 +17,10 @@ const Ranking = ({navigation,route}) => {
     },[])
 
     const getRoom = () =>{
-        axios.get('https://tebar.spydercode.my.id/api/rooms')
-            .then(response =>setRoom(response.data.data))
+        if(room==null){
+            axios.get('https://tebar.spydercode.my.id/api/rooms/detail/'+route.params.room_id)
+                .then(response =>setRoom(response.data))
+        }
     }
 
     let listItemView = (item,data) => {
@@ -33,7 +35,7 @@ const Ranking = ({navigation,route}) => {
                 </Body>
                 <Right>
                     <Button transparent>
-                        <Text>{item.id}</Text>
+                        <Text>{item.point}</Text>
                     </Button>
                 </Right>
                 </ListItem>

@@ -12,7 +12,12 @@ const CreateRoom = ({navigation,route}) => {
     const [name, setName] = useState('')
     const [id, setId] = useState()
 
-    const socket = io.connect('http://localhost:3000');
+    const socket = io.connect('https://tebar.spydercode.my.id', {
+        path: "/io",
+        extraHeaders: {
+            "my-custom-header": "abcd"
+        }
+    });
 
     useEffect(() => {
         socket.on('update',(message)=>{

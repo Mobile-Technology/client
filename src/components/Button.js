@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 25,
     lineHeight: 26,
-    fontFamily: 'Game On_PersonalUseOnly',
     color: theme.colors.dark
   },
 })

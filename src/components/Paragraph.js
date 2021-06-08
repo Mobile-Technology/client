@@ -13,7 +13,6 @@ const styles = StyleSheet.create({
     lineHeight: 21,
     // textAlign: 'center',
     marginBottom: 12,
-    fontFamily: 'Game On_PersonalUseOnly',
     fontWeight:'bold',
     color: theme.colors.dark,
   },
