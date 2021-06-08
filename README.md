@@ -1,3 +1,11 @@
+Requirement system
+1. install expo 
+
+``` 
+npm install -g expo-cli
+````
+
+
 ## How to use?
 
 1. Download or clone this repo.
